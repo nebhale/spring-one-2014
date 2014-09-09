@@ -16,11 +16,7 @@
 
 package com.nebhale.springone2014.model;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 // TODO 2: CONFLICT status code
-@ResponseStatus(HttpStatus.CONFLICT)
 public final class IllegalTransitionException extends Exception {
 
     IllegalTransitionException(Long gameId, Long doorId, DoorStatus from, DoorStatus to) {

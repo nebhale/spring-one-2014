@@ -20,20 +20,15 @@ import com.nebhale.springone2014.model.*;
 import com.nebhale.springone2014.repository.GameDoesNotExistException;
 import com.nebhale.springone2014.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Map;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 // TODO 1: REST Controller for /games
-@RestController
-@RequestMapping(value = "/games")
 final class GamesController {
 
     private final DoorsResourceAssembler doorsResourceAssembler;
@@ -51,30 +46,25 @@ final class GamesController {
     }
 
     // TODO 1: POST /
-    @RequestMapping(method = RequestMethod.POST, value = "")
     // TODO 2: CREATED Status Code
-    @ResponseStatus(HttpStatus.CREATED)
     HttpHeaders createGame() {
         Game game = this.gameRepository.create();
 
         HttpHeaders headers = new HttpHeaders();
         // TODO 1: Location: /games/{gameId}
-        headers.setLocation(linkTo(GamesController.class).slash(game.getId()).toUri());
 
         return headers;
     }
 
     // TODO 1: GET /{gameId}, Content-Type: application/json
-    @RequestMapping(method = RequestMethod.GET, value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Resource<Game> showGame(@PathVariable Long gameId) throws GameDoesNotExistException {
+    Game showGame(@PathVariable Long gameId) throws GameDoesNotExistException {
         Game game = this.gameRepository.retrieve(gameId);
         // TODO 3: return assembled Game Resource
-        return this.gameResourceAssembler.toResource(game);
+        return game;
     }
 
     // TODO 1: DELETE /{gameId}
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     void destroyGame(@PathVariable Long gameId) throws GameDoesNotExistException {
         this.gameRepository.remove(gameId);
@@ -82,15 +72,13 @@ final class GamesController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{gameId}/doors", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Resources<Resource<Door>> showDoors(@PathVariable Long gameId) throws GameDoesNotExistException {
+    Collection<Door> showDoors(@PathVariable Long gameId) throws GameDoesNotExistException {
         Game game = this.gameRepository.retrieve(gameId);
         // TODO 3: return assembled Resources Door Resource
-        return this.doorsResourceAssembler.toResource(game);
+        return game.getDoors();
     }
 
     // TODO 1: PUT /{gameId}/doors/{doorId}, Accepts: application/json, Content-Type: application/json
-    @RequestMapping(method = RequestMethod.PUT, value = "/{gameId}/doors/{doorId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     void transitionDoor(@PathVariable Long gameId, @PathVariable Long doorId,
                         @RequestBody Map<String, String> payload)
@@ -101,8 +89,6 @@ final class GamesController {
     }
 
     // TODO 2: Handle IllegalArgumentException, BAD_REQUEST Status Code
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     String handleBadRequests(Exception e) {
         return e.getMessage();
     }

@@ -21,8 +21,6 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 @Component
 final class GameResourceAssembler implements ResourceAssembler<Game, Resource<Game>> {
 
@@ -31,8 +29,6 @@ final class GameResourceAssembler implements ResourceAssembler<Game, Resource<Ga
         Resource<Game> resource = new Resource<Game>(game);
         // TODO 3: link to /games/{gameId}/doors, rel: doors
         // TODO 3: link to /games/{gameId}, rel: self
-        resource.add(linkTo(GamesController.class).slash(game.getId()).slash("doors").withRel("doors"));
-        resource.add(linkTo(GamesController.class).slash(game.getId()).withSelfRel());
         return resource;
     }
 
