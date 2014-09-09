@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    highline (1.6.21)
+    json (1.8.1)
+    mime-types (1.25.1)
+    rdoc (4.1.0)
+    rest-client (1.6.8.rc1)
+      mime-types (~> 1.16)
+      rdoc (>= 2.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  highline
+  json
+  rest-client

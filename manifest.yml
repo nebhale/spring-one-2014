@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-service
+  memory: 512M
+  instances: 1
+  path: target/large-application-1-SNAPSHOT.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
